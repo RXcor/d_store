@@ -1,0 +1,80 @@
+Postman
+1. Авторизация
+#Post запрос
+http://127.0.0.1:8000/auth/token/login/
+  body: {
+    email:
+    password:
+  }
+#Ответ:
+  {
+      "data": {
+          "type": "TokenCreateView",
+          "id": "b9b57719a1ca62e6b7b830e496435c0fabfc9f41",
+          "attributes": {
+              "auth_token": "b9b57719a1ca62e6b7b830e496435c0fabfc9f41"
+          }
+      }
+    }
+
+
+  2. Получение списка корзин:
+  #Get запрос
+  http://127.0.0.1:8000/api/v1/d_store/baskets/
+  header: {
+    Authorization: Token {auth_token}
+  }
+
+  #Ответ:
+  {
+  "data": {
+      "data": [
+          {
+              "id": 1,
+              "customer": {
+                  "id": 1,
+                  "name": "Виталий Глухих"
+              },
+              "active": true,
+              "positions": [
+                  {
+                      "product": {
+                          "vendor_code": "арт1",
+                          "title": "товар1",
+                          "retail_price": "12.50"
+                      },
+                      "number": 2,
+                      "amount": 25.0
+                  }
+              ]
+          },
+          .
+          #пользователи с ролью manager получают список активных корзин,
+          #пользователи с ролью customer получают одну активную карзину(если
+          #такой нет то она создается и в ответ присылается пустая корзина)
+          .
+
+          ]
+    }
+  }
+
+  3. Редактирование корзин производится через редактирование позиций
+   #DELETE запрос
+   http://127.0.0.1:8000/api/v1/d_store/positions/
+
+   header {
+     Authorization: Token {auth_token}
+   }
+   body {
+     position: {id}
+   }
+
+   #PUT запрос
+   http://127.0.0.1:8000/api/v1/d_store/positions/
+   body {
+     position: {id}
+     bumber:
+   }
+
+   4. Загрузка csv файла
+   $ python manage.py scrape
